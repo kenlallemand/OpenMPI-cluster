@@ -11,7 +11,7 @@ passwd mpiuser
 #se le dan permisos root al nuevo usuario
 echo mpiuser ALL=(ALL=ALL) ALL >> /etc/sudoers
 su - mpiuser
-yum -y install nfs-utils nfs-utils-lib openssh-server openssh-clients
+yum -y install nfs-utils nfs-utils-lib openssh-server
 systemctl start rpcbind nfs-server
 systemctl enable rpcbind nfs-server
 mkdir /nfs
@@ -35,15 +35,15 @@ echo "Se recomienda dejar en blanco las 3 siguientes preguntas de la consola, so
 \n
 \n
 cd ~/.ssh
-cp id_rsa.pub authorized_keys
+cp id_rsa authorized_keys
 #se copia al nfs las llaves, para facilidad de acceso
 mkdir /nfs/.ssh
-cp ~/.ssh/id_rsa.pub /nfs/.ssh
+cp ~/.ssh/id_rsa /nfs/.ssh
 #---aqui comienza la configuracion con mpi---
 #instalacion de dependencias
 yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel
 #Obtenemos el codigo fuente con wget desde la pagina oficial
-wget http://www.download.open-mpi.org/software/ompi/v3.1/openmpi-3.1.2.tar.gz
+wget https://www.download.open-mpi.org/software/ompi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
 tar -zxvf openmpi-3.1.2.tar.gz
 cd openmpi-3.1.2
