@@ -4,6 +4,7 @@ echo "Asegurate de ejecutarlo como administrador"
 echo "Para ser ejecutado en centOS 7 y superior, con acceso a internet"
 echo "Escrito para la clase de PC2"
 #creacion de usuario para uso en el cluster
+su
 adduser mpiuser
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
 passwd mpiuser
