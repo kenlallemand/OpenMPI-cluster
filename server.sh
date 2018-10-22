@@ -49,7 +49,8 @@ cd openmpi-3.1.2
 #creamos el directorio que contendra los binarios de openmpi en nfs
 mkdir /nfs/openmpi
 #compilamos (este proceso tomara su tiempo)
-.configure -prefix=/nfs/openmpi CC=gcc CXX=g++ F77=gfortran FC=gfortran
+#.configure -prefix=/nfs/openmpi CC=gcc CXX=g++ F77=gfortran FC=gfortran
+.configure -prefix=/nfs/openmpi
 make
 make install
 #agregamos al entorno del usuario
