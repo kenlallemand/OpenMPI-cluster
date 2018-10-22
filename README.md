@@ -1,7 +1,7 @@
 # OpenMPI-cluster
 Scripts para la creacion e inicializacion de servidor y nodos/clientes dentro de una red local, donde se desea crear un cluster con el protocolo MPI
 
-<br>ISTRUCCIONES<\br>
+**INSTRUCCIONES**
 Para el correcto funcionamiento de los script por favor seguir las intrucciones al pie de la letra
 
 1) si es un cluster en virtualbox(solo aplica para modo de prueba, se crea la red local virtual)
