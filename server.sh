@@ -25,27 +25,30 @@ firewall-cmd --permanent --zone=public --add-service=rpc-bind
 firewall-cmd --reload
 systemctl restart nfs
 #Configuracion de ssh y claves privadas/publicas
-su - mpiuser
-mkdir ~/.ssh 
+#su - mpiuser
 read -p "Nombre de usuario uninorte: " nombre_usuario
-ssh-keygen -t rsa -b 4096 -C "$nombre_usuario@uninorte.edu.co"
+su mpiuser -c ""
+sudo -u mpiuser -H sh -c "cd ~/; mkdir ~/.ssh"
+sudo -u mpiuser -H sh -c "ssh-keygen -t rsa -b 4096 -C "${nombre_usuario}@uninorte.edu.co""
 echo "Se recomienda dejar en blanco las 3 siguientes preguntas de la consola, solo presionar enter."
 #copiando las claves de la carpeta donde se guardan
-cd ~/.ssh
-cp id_rsa authorized_keys
+sudo -u mpiuser -H sh -c "cd ~/.ssh"
+sudo -u mpiuser -H sh -c "cp id_rsa authorized_keys"
 #se copia al nfs las llaves, para facilidad de acceso
 mkdir /nfs/.ssh
-cp ~/.ssh/id_rsa /nfs/.ssh
+chmod -R 777 /nfs
+sudo -u mpiuser -H sh -c "cp ~/.ssh/id_rsa /nfs/.ssh"
 #---aqui comienza la configuracion con mpi---
 #instalacion de dependencias
 yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel
-#Obtenemos el codigo fuente con wget desde la pagina oficial
+#Obtenemos el codigo fuente de la la pagina oficial con wget
 wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
 tar -zxvf openmpi-3.1.2.tar.gz
 cd openmpi-3.1.2
 #creamos el directorio que contendra los binarios de openmpi en nfs
 mkdir /nfs/openmpi
+chmod 777 /nfs/openmpi
 #compilamos (este proceso tomara su tiempo)
 #.configure -prefix=/nfs/openmpi CC=gcc CXX=g++ F77=gfortran FC=gfortran
 .configure -prefix=/nfs/openmpi
