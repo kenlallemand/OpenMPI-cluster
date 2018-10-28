@@ -9,7 +9,7 @@ echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo u
 passwd mpiuser
 #se le dan permisos root al nuevo usuario
 echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers
-yum -y install nfs-utils openssh-server
+yum -y install nfs-utils openssh-server nano
 systemctl start rpcbind nfs-server
 systemctl enable rpcbind nfs-server
 mkdir /nfs
@@ -24,21 +24,19 @@ firewall-cmd --permanent --zone=public --add-service=mountd
 firewall-cmd --permanent --zone=public --add-service=rpc-bind
 firewall-cmd --reload
 systemctl restart nfs
-#cambiando al directorio del usuario mpiuser (para gestionar ssh)
-cd /home/mpiuser
 #Configuracion de ssh y claves privadas/publicas
 read -p "Nombre de usuario uninorte: " nombre_usuario
-sudo -u mpiuser -H sh -c "pwd; mkdir .ssh"
+sudo -u mpiuser -H sh -c "pwd; mkdir /home/mpiuser/.ssh"
 sudo -u mpiuser -H sh -c "ssh-keygen -t rsa -b 4096 -C "${nombre_usuario}@uninorte.edu.co""
 echo "Se recomienda dejar en blanco las 3 siguientes preguntas de la consola, solo presionar enter."
 #copiando las claves de la carpeta donde se guardan
-cd .ssh
+cd /home/mpiuser/.ssh
 sudo -u mpiuser -H sh -c "cp id_rsa.pub authorized_keys"
 #se copia al nfs las llaves, para facilidad de acceso
 mkdir /nfs/.ssh
 chmod -R 777 /nfs
-sudo -u mpiuser -H sh -c "cp .ssh/id_rsa /nfs/.ssh"
-sudo -u mpiuser -H sh -c "cp .ssh/id_rsa.pub /nfs/.ssh"
+sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa /nfs/.ssh"
+sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /nfs/.ssh"
 #regresamos al directorio de la carpeta compartida
 cd /nfs
 #---aqui comienza la configuracion con mpi---
@@ -52,7 +50,7 @@ cd openmpi-3.1.2
 #creamos el directorio que contendra los binarios de openmpi en nfs
 mkdir /nfs/openmpi
 chmod 777 /nfs/openmpi
-#compilamos (este proceso tomara su tiempo)
+#compilamos (este proceso tomara su tiempo, para reducirlo hemos desactivado fortran)
 ./configure -prefix=/nfs/openmpi --disable-fortran
 make
 make install
