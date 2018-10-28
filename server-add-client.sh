@@ -18,7 +18,7 @@ pass_ssh="root"
 echo $pass_ssh
 #pd: se ejecutan los comandos por medio de ssh al cliente
 #Agregacion de usuario
-ssh root@${ip_local} "adduser mpiuser"
+ssh root@${ip_local} 'adduser mpiuser'
 #se agrega el usuario para trabajar en el cluster
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
 sshpass -p $pass_ssh ssh root@${ip_local}'passwd mpiuser'
