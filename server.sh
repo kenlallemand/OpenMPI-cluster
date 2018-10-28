@@ -8,7 +8,7 @@ adduser mpiuser
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
 passwd mpiuser
 #se le dan permisos root al nuevo usuario
-echo mpiuser ALL=(ALL=ALL) ALL >> /etc/sudoers
+echo "mpiuser ALL=(ALL=ALL) ALL" >> /etc/sudoers
 su - mpiuser
 yum -y install nfs-utils openssh-server
 systemctl start rpcbind nfs-server
@@ -40,7 +40,7 @@ cp ~/.ssh/id_rsa /nfs/.ssh
 #instalacion de dependencias
 yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel
 #Obtenemos el codigo fuente con wget desde la pagina oficial
-wget https://www.download.open-mpi.org/software/ompi/v3.1/openmpi-3.1.2.tar.gz
+wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
 tar -zxvf openmpi-3.1.2.tar.gz
 cd openmpi-3.1.2
@@ -52,8 +52,8 @@ mkdir /nfs/openmpi
 make
 make install
 #agregamos al entorno del usuario
-echo export PATH=$PATH:/nfs/openmpi/bin >> ~/.bashrc
-echo export LD_LIBRARY_PATH=/nfs/openmpi/lib >> ~/.bashrc
+echo "export PATH=$PATH:/nfs/openmpi/bin" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib" >> ~/.bashrc
 source ~/.bashrc
 #Compruebo donde esta el binario "mpirun"
 which mpirun
