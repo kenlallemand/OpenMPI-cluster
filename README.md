@@ -3,7 +3,7 @@ Scripts para la creacion e inicializacion de servidor y nodos/clientes dentro de
 
 **INSTRUCCIONES**
 
-Para el correcto funcionamiento de los script por favor seguir las instrucciones al pie de la letra
+Para el correcto funcionamiento de los script por favor seguir las siguientes instrucciones:
 
 1) si es un cluster en virtualbox(solo aplica para modo de prueba, se crea la red local virtual)
 	ejecutar el siguiente comando en el directorio donde se encuentra el binario ejecutable de virtualbox
