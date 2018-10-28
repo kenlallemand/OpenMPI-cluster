@@ -1,0 +1,1 @@
+echo TARGET_USER_PASS | sudo -S -H -u TARGET_USER bash -c 'bash /usr/local/hadoop/sbin/start-dfs.sh'

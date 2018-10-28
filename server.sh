@@ -24,20 +24,21 @@ firewall-cmd --permanent --zone=public --add-service=mountd
 firewall-cmd --permanent --zone=public --add-service=rpc-bind
 firewall-cmd --reload
 systemctl restart nfs
+#cambiando al directorio del usuario mpiuser (para gestionar ssh)
+cd /home/mpiuser
 #Configuracion de ssh y claves privadas/publicas
-#su - mpiuser
 read -p "Nombre de usuario uninorte: " nombre_usuario
-su mpiuser -c ""
-sudo -u mpiuser -H sh -c "cd ~/; mkdir ~/.ssh"
+sudo -u mpiuser -H sh -c "pwd; mkdir .ssh"
 sudo -u mpiuser -H sh -c "ssh-keygen -t rsa -b 4096 -C "${nombre_usuario}@uninorte.edu.co""
 echo "Se recomienda dejar en blanco las 3 siguientes preguntas de la consola, solo presionar enter."
 #copiando las claves de la carpeta donde se guardan
-sudo -u mpiuser -H sh -c "cd ~/.ssh"
-sudo -u mpiuser -H sh -c "cp id_rsa authorized_keys"
+sudo -u mpiuser -H sh -c "cd .ssh"
+sudo -u mpiuser -H sh -c "cp id_rsa.pub authorized_keys"
 #se copia al nfs las llaves, para facilidad de acceso
 mkdir /nfs/.ssh
 chmod -R 777 /nfs
-sudo -u mpiuser -H sh -c "cp ~/.ssh/id_rsa /nfs/.ssh"
+sudo -u mpiuser -H sh -c "cp .ssh/id_rsa /nfs/.ssh"
+sudo -u mpiuser -H sh -c "cp .ssh/id_rsa.pub /nfs/.ssh"
 #---aqui comienza la configuracion con mpi---
 #instalacion de dependencias
 yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel
