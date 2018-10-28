@@ -5,9 +5,9 @@ echo "Para ser ejecutado en centOS 7 y superior, con acceso a internet"
 echo "Escrito para la clase de PC2"
 #creacion de usuario para uso en el cluster
 adduser mpiuser
-echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
+echo 'Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): '
 passwd mpiuser
-#se le dan permisos root al nuevo usuario
+#Agregacion de permisos root al usuario recientemente creado
 echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers
 yum -y install nfs-utils openssh-server nano
 systemctl start rpcbind nfs-server
