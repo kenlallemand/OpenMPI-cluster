@@ -16,8 +16,10 @@ read -p "Introduzca la contraseña de root del cliente: " pass_ssh
 echo $pass_ssh
 echo $pass_ssh
 #pd: se ejecutan los comandos por medio de ssh al cliente
-#Agregacion de usuario
-ssh root@${ip_local} 'adduser mpiuser'
+#Agregacion de 
+echo root@$ip_local
+ssh -o StrictHostKeyChecking=no  root@$ip_local
+adduser mpiuser
 #se agrega el usuario para trabajar en el cluster
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
 passwd mpiuser
