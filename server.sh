@@ -15,7 +15,7 @@ systemctl enable rpcbind nfs-server
 mkdir /nfs
 mkdir /nfs/projects
 touch /nfs/hosts
-echo read -p "IP local del servidor: " ip_pc
+read -p "IP local del servidor: " ip_pc
 echo $ip_pc >> /nfs/hosts
 #chmod 777 /nfs
 exportfs -a
@@ -41,7 +41,7 @@ sudo -u mpiuser -H sh -c "cp .ssh/id_rsa /nfs/.ssh"
 sudo -u mpiuser -H sh -c "cp .ssh/id_rsa.pub /nfs/.ssh"
 #---aqui comienza la configuracion con mpi---
 #instalacion de dependencias
-yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel
+yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel wget
 #Obtenemos el codigo fuente de la la pagina oficial con wget
 wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
