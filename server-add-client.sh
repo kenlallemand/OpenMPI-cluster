@@ -18,38 +18,38 @@ pass_ssh="root"
 echo $pass_ssh
 #pd: se ejecutan los comandos por medio de ssh al cliente
 #Agregacion de usuario
-ssh root@$ip_local "adduser mpiuser"
+ssh root@${ip_local} "adduser mpiuser"
 #se agrega el usuario para trabajar en el cluster
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
-sshpass -p $pass_ssh ssh root@$ip_local'passwd mpiuser'
+sshpass -p $pass_ssh ssh root@${ip_local}'passwd mpiuser'
 #se le dan permisos root al nuevo usuario
-sshpass -p $pass_ssh ssh root@$ip_local 'echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers'
+sshpass -p $pass_ssh ssh root@${ip_local} 'echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers'
 #instalacion dependencias nfs
-sshpass -p $pass_ssh ssh root@$ip_local 'yum -y install nfs-utils wget'
-sshpass -p $pass_ssh ssh root@$ip_local 'mkdir -p /nfs; chmod -R 777 /nfs'
+sshpass -p $pass_ssh ssh root@${ip_local} 'yum -y install nfs-utils wget'
+sshpass -p $pass_ssh ssh root@${ip_local} 'mkdir -p /nfs; chmod -R 777 /nfs'
 #se toma como predeterminada del servidor la direccion 10.0.1.2
 read -p "IP local del servidor (normalmente 10.0.1.2): " ip_pc
-sshpass -p $pass_ssh ssh root@$ip_local 'showmount -e $ip_pc; rpcinfo -p $ip_pc'
+sshpass -p $pass_ssh ssh root@${ip_local} 'showmount -e $ip_pc; rpcinfo -p $ip_pc'
 #montaje disco de red en carpeta local
-sshpass -p $pass_ssh ssh root@$ip_local 'mount ${ip_pc}:/nfs /nfs'
-sshpass -p $pass_ssh ssh root@$ip_local 'df -h'
-sshpass -p $pass_ssh ssh root@$ip_local 'cd /nfs'
-sshpass -p $pass_ssh ssh root@$ip_local 'touch /nfs/sucess-${ip_local}'
-echo "$HOSTNAME	$ip_local" >> /nfs/hosts
+sshpass -p $pass_ssh ssh root@${ip_local} 'mount ${ip_pc}:/nfs /nfs'
+sshpass -p $pass_ssh ssh root@${ip_local} 'df -h'
+sshpass -p $pass_ssh ssh root@${ip_local} 'cd /nfs'
+sshpass -p $pass_ssh ssh root@${ip_local} 'touch /nfs/sucess-${{ip_local}}'
+echo "$HOSTNAME	${ip_local}" >> /nfs/hosts
 #se guarda para proximo montaje
-sshpass -p $pass_ssh ssh root@$ip_local 'echo "${ip_pc}:/nfs /nfs nfs auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0" >> /etc/fstab'
+sshpass -p $pass_ssh ssh root@${ip_local} 'echo "${ip_pc}:/nfs /nfs nfs auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0" >> /etc/fstab'
 #configuracion de ssh
 #se copia desde el nfs la clave del servidor
-sshpass -p $pass_ssh ssh root@$ip_local 'sudo -u mpiuser -H sh -c "mkdir /home/mpiuser/.ssh"'
-sshpass -p $pass_ssh ssh root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa.pub /home/mpiuser/.ssh"'
-sshpass -p $pass_ssh ssh root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa /home/mpiuser/.ssh"'
+sshpass -p $pass_ssh ssh root@${ip_local} 'sudo -u mpiuser -H sh -c "mkdir /home/mpiuser/.ssh"'
+sshpass -p $pass_ssh ssh root@${ip_local} 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa.pub /home/mpiuser/.ssh"'
+sshpass -p $pass_ssh ssh root@${ip_local} 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa /home/mpiuser/.ssh"'
 #se copia la clave del servidor como clave segura
-sshpass -p $pass_ssh ssh root@$ip_local 'sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /home/mpiuser/authorized_keys"'
+sshpass -p $pass_ssh ssh root@${ip_local} 'sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /home/mpiuser/authorized_keys"'
 #se agregan en el entorno del sistema los binarios y librerias de openmpi
-sshpass -p $pass_ssh ssh root@$ip_local 'echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc'
-sshpass -p $pass_ssh ssh root@$ip_local 'echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc'
+sshpass -p $pass_ssh ssh root@${ip_local} 'echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc'
+sshpass -p $pass_ssh ssh root@${ip_local} 'echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc'
 #se actualiza el entorno del sistema
-sshpass -p $pass_ssh ssh root@$ip_local 'sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"'
+sshpass -p $pass_ssh ssh root@${ip_local} 'sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"'
 exit
 echo $nombre_pc >> /home/mpiuser/.mpi_hostfile
 echo "cliente del cluster configurado correctamente"
