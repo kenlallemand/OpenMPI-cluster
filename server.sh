@@ -8,8 +8,7 @@ adduser mpiuser
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
 passwd mpiuser
 #se le dan permisos root al nuevo usuario
-echo "mpiuser ALL=(ALL=ALL) ALL" >> /etc/sudoers
-su - mpiuser
+echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers
 yum -y install nfs-utils openssh-server
 systemctl start rpcbind nfs-server
 systemctl enable rpcbind nfs-server
@@ -26,6 +25,7 @@ firewall-cmd --permanent --zone=public --add-service=rpc-bind
 firewall-cmd --reload
 systemctl restart nfs
 #Configuracion de ssh y claves privadas/publicas
+su - mpiuser
 mkdir ~/.ssh 
 read -p "Nombre de usuario uninorte: " nombre_usuario
 ssh-keygen -t rsa -b 4096 -C "$nombre_usuario@uninorte.edu.co"
