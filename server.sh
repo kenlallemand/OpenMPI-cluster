@@ -43,7 +43,7 @@ sudo -u mpiuser -H sh -c "cp .ssh/id_rsa.pub /nfs/.ssh"
 #instalacion de dependencias
 yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel wget
 #Obtenemos el codigo fuente de la la pagina oficial con wget
-wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
+get https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
 tar -zxvf openmpi-3.1.2.tar.gz
 cd openmpi-3.1.2
@@ -51,8 +51,7 @@ cd openmpi-3.1.2
 mkdir /nfs/openmpi
 chmod 777 /nfs/openmpi
 #compilamos (este proceso tomara su tiempo)
-#.configure -prefix=/nfs/openmpi CC=gcc CXX=g++ F77=gfortran FC=gfortran
-.configure --prefix=/nfs/openmpi
+./configure -prefix=/nfs/openmpi --disable-fortran
 make
 make install
 #agregamos al entorno del usuario
