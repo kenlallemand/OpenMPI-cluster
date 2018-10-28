@@ -7,9 +7,10 @@ echo "Escrito para la clase de PC2"
 read -p "IP del cliente en red local y nombre en el cluster(IP's del 10.0.1.3 al 10.0.1.100, coloca un nombre nuevo para evitar coliciones: node1, node2...): " ip_local nombre_pc
 echo "$ip_local	$nombre_pc" >> /etc/hosts
 echo "/nfs ${ip_local}(rw,sync,no_root_squash,no_subtree_check)" >> /etc/exports
-read -p "ntroduzca la contraseña de root del cliente (root por defecto)" password
-#se agrega el usuario para trabajar en el cluster
+password="root"
+echo $password
 #pd: se ejecutan los comandos por medio de ssh al cliente
+#Agregacion de usuario
 ssh root@$ip_local 'adduser mpiuser' 
 #se agrega el usuario para trabajar en el cluster
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
