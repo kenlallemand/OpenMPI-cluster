@@ -42,10 +42,10 @@ sudo -u mpiuser -H sh -c "cp .ssh/id_rsa.pub /nfs/.ssh"
 #regresamos al directorio de la carpeta compartida
 cd /nfs
 #---aqui comienza la configuracion con mpi---
-#instalacion de dependencias
-yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel wget
+#instalacion de dependencias (quitamos gcc-gfortran)
+yum install -y gcc gcc-c++ make kernel-devel wget
 #Obtenemos el codigo fuente de la la pagina oficial con wget
-get https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
+wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
 tar -zxvf openmpi-3.1.2.tar.gz
 cd openmpi-3.1.2
