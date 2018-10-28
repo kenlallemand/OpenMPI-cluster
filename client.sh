@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 echo "Script para la creacion de un cliente del Cluster openmpi"
 echo "Asegurate de ejecutarlo como root"
 echo "Para ser ejecutado en centOS 7 y superior, con acceso a internet de banda ancha, y en una red local junto con el servidor"

@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 echo "Script para la agregacion de clientes del servidor del Cluster, NFS"
 echo "Asegurate de ejecutarlo como administrador"
 echo "Para ser ejecutado en centOS 7 y superior, con acceso a internet"
