@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Script para la creacion del servidor del Cluster, NFS"
-echo "Asegurate de ejecutarlo como administrador"
+echo "Asegurate de ejecutarlo como root"
 echo "Para ser ejecutado en centOS 7 y superior, con acceso a internet"
 echo "Escrito para la clase de PC2"
 #creacion de usuario para uso en el cluster
@@ -39,6 +39,8 @@ mkdir /nfs/.ssh
 chmod -R 777 /nfs
 sudo -u mpiuser -H sh -c "cp .ssh/id_rsa /nfs/.ssh"
 sudo -u mpiuser -H sh -c "cp .ssh/id_rsa.pub /nfs/.ssh"
+#regresamos al directorio de la carpeta compartida
+cd /nfs
 #---aqui comienza la configuracion con mpi---
 #instalacion de dependencias
 yum install -y gcc gcc-c++ make gcc-gfortran kernel-devel wget
@@ -55,8 +57,8 @@ chmod 777 /nfs/openmpi
 make
 make install
 #agregamos al entorno del usuario
-echo "export PATH=$PATH:/nfs/openmpi/bin" >> /home/mpiuser/.bashrc
-echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib" >> /home/mpiuser/.bashrc
+echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc
+echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc
 sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"
 #Compruebo donde esta el binario "mpirun"
 which mpirun
