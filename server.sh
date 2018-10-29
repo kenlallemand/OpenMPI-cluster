@@ -9,7 +9,7 @@ echo 'Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo u
 passwd mpiuser
 #Agregacion de permisos root al usuario recientemente creado
 echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers
-yum -y install nfs-utils openssh-server nano
+yum -y install nfs-utils openssh-server nano python-pip
 systemctl start rpcbind nfs-server
 systemctl enable rpcbind nfs-server
 mkdir /nfs
@@ -53,18 +53,28 @@ cd openmpi-3.1.2
 mkdir /nfs/openmpi
 chmod 777 /nfs/openmpi
 #compilamos (este proceso tomara su tiempo, para reducirlo hemos desactivado fortran)
+# parametros adicionales a probar ../configure --prefix=/opt/openmpi --with-devel-headers --enable-binaries
 ./configure -prefix=/nfs/openmpi --disable-fortran
 make
 make install
 #agregamos al entorno del usuario
 echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc
 echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc
-sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"
-#Compruebo donde esta el binario "mpirun"
+#agregamos al entorno de root
+echo "export PATH=/nfs/openmpi/bin:$PATH" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
+sudo -u mpiuser -H sh -c "source ~/.bashrc"
+#limpio la carpeta /nfs con el codigo fuente no necesario
 rm -rf /nfs/openmpi-3.1.2
 rm -rf /nfs/openmpi-3.1.2.tar.gz
+#Compruebo donde esta el binario "mpirun"
+#para root
 which mpirun
+#para mpiuser
 sudo -u mpiuser -H sh -c "which mpirun"
+#se instala el soporte para mpi4python
+#pip install mpi4py
+yum install -y mpi4py-openmpi
 echo "Ya esta listo, openmpi funcional con los compiladores de c, c++ y fortran, diviertete :)"
 cd /nfs/openmpi/projects
 su - mpiuser

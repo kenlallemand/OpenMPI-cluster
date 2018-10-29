@@ -51,9 +51,7 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /e
 #se copia desde el nfs la clave del servidor en la cuenta root
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir ~/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp /nfs/.ssh/id_rsa.pub /nfs/.ssh/id_rsa ~/.ssh"'
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cd ~/.ssh'
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp ~/id_rsa.pub authorized_keys'
-
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
 #se copia desde el nfs la clave del servidor en la cuenta mpiuser
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "mkdir /home/mpiuser/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa.pub /home/mpiuser/.ssh"'
@@ -66,4 +64,6 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "expor
 #se actualiza el entorno del sistema
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"'
 echo $nombre_pc >> /home/mpiuser/.mpi_hostfile
+#instalacion soporte python para mpi
+yum install -y mpi4py-openmpi
 echo "cliente del cluster configurado correctamente"
