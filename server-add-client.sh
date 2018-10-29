@@ -27,7 +27,7 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mpius
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'yum -y install nfs-utils wget'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir -p /nfs'
 #se toma como predeterminada del servidor la direccion 10.0.1.2
-read -p "IP local del servidor (normalmente 10.0.1.2): " 
+read -p "IP local del servidor (normalmente 10.0.1.2): " ip_server
 #debug
 echo "$ip_server ip en el servidor"
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "$ip_server ip en el cliente"'
