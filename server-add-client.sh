@@ -66,5 +66,6 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'source ~/.b
 echo $nombre_pc >> /home/mpiuser/.mpi_hostfile
 echo $nombre_pc >> ~/.mpi_hostfile
 #instalacion soporte python para mpi
+cd /nfs
 yum install -y python-pip mpi4py-openmpi
 echo "cliente del cluster configurado correctamente"
