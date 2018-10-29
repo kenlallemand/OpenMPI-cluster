@@ -37,11 +37,11 @@ mkdir /nfs/.ssh
 chmod -R 777 /nfs
 sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa /nfs/.ssh"
 sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /nfs/.ssh"
-#regresamos al directorio de la carpeta compartida
-cd /nfs
 #---aqui comienza la configuracion con mpi---
 #instalacion de dependencias (quitamos gcc-gfortran)
 yum install -y gcc gcc-c++ make kernel-devel wget
+#regresamos al directorio de la carpeta compartida
+cd /nfs
 #Obtenemos el codigo fuente de la la pagina oficial con wget
 wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-3.1.2.tar.gz
 #descomprimimos
@@ -59,7 +59,10 @@ echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc
 echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc
 sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"
 #Compruebo donde esta el binario "mpirun"
+rm -rf /nfs/openmpi-3.1.2
+rm -rf /nfs/openmpi-3.1.2.tar.gz
 which mpirun
 sudo -u mpiuser -H sh -c "which mpirun"
 echo "Ya esta listo, openmpi funcional con los compiladores de c, c++ y fortran, diviertete :)"
+cd /nfs/openmpi/projects
 su - mpiuser

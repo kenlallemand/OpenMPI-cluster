@@ -16,7 +16,6 @@ exportfs -a
 systemctl restart nfs
 read -p "Introduzca la contraseña de root del cliente: " pass_ssh
 #pd: se ejecutan los comandos por medio de ssh al cliente
-echo root@$ip_local
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'adduser mpiuser'
 #se agrega el usuario para trabajar en el cluster
 echo "Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo un cluster de demostracion): "
@@ -35,25 +34,28 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "showmount -
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "rpcinfo -p $ip_server"
 #montaje disco de red en carpeta local
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "mount ${ip_server}:/nfs /nfs""
-#debug
-read -p "esperando debug" debug
-
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "mount $ip_server:/nfs /nfs"
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'df -h'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir /nfs/online_nodes/'
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "touch /nfs/online_nodes/sucess-${ip_local}"
+#se agrega la informacion de usuario y cuentas en la carpeta /nfs/online-nodes para uso facil
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "touch /nfs/online_nodes/node_ip-${ip_local}"
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "$ip_local	nombre_pc" >> /nfs/online_nodes/node_ip-${ip_local}"
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "cat /etc/passwd >> /nfs/online_nodes/node_ip-${ip_local}"
 echo "$nombre_pc	$ip_local" >> /nfs/hosts
 #se guarda para proximo montaje
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "$ip_server:/nfs /nfs nfs auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0" >> /etc/fstab"
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mount -a'
-
+#Agregamos el montado automatico al inicio del sistema
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mount -a" >> /etc/rc.local'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mount -a" >> /etc/rc.d/rc.local'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /etc/rc.local'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /etc/rc.d/rc.local'
 #configuracion de ssh
 #se copia desde el nfs la clave del servidor
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "mkdir /home/mpiuser/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa.pub /home/mpiuser/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa /home/mpiuser/.ssh"'
 #se copia la clave del servidor como clave segura
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /home/mpiuser/authorized_keys"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /home/mpiuser/.ssh/authorized_keys"'
 #se agregan en el entorno del sistema los binarios y librerias de openmpi
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc'
