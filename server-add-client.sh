@@ -27,12 +27,19 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mpius
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'yum -y install nfs-utils wget'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir -p /nfs'
 #se toma como predeterminada del servidor la direccion 10.0.1.2
-read -p "IP local del servidor (normalmente 10.0.1.2): " ip_server
+read -p "IP local del servidor (normalmente 10.0.1.2): " 
+#debug
+echo "$ip_server ip en el servidor"
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "$ip_server ip en el cliente"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "$ip_server ip en el cliente opcion 2""
+
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'showmount -e $ip_server'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'rpcinfo -p $ip_server'
 #montaje disco de red en carpeta local
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mount $ip_server:/nfs /nfs"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mount ${ip_server}:/nfs /nfs"'
+#debug
 read -p "esperando debug" debug
+
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mount $ip_server:/nfs /nfs'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'df -h'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir /nfs/online_nodes/'
