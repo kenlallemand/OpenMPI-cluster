@@ -32,6 +32,8 @@ echo "Se recomienda dejar en blanco las 3 siguientes preguntas de la consola, so
 #copiando las claves de la carpeta donde se guardan
 cd /home/mpiuser/.ssh
 sudo -u mpiuser -H sh -c "cp id_rsa.pub authorized_keys"
+#se copian a la carpeta root las llaves, para el login automatico
+cp -r /home/mpiuser/.ssh ~/.ssh
 #se copia al nfs las llaves, para facilidad de acceso
 mkdir /nfs/.ssh
 chmod -R 777 /nfs
