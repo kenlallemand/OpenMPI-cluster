@@ -33,9 +33,7 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "$ip_s
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "showmount -e $ip_server"
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "rpcinfo -p $ip_server"
 #montaje disco de red en carpeta local
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "mount ${ip_server}:/nfs /nfs""
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "mount $ip_server:/nfs /nfs"
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'df -h'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir /nfs/online_nodes/'
 #se agrega la informacion de usuario y cuentas en la carpeta /nfs/online-nodes para uso facil
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "touch /nfs/online_nodes/node_ip-${ip_local}"
@@ -50,7 +48,13 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mount
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /etc/rc.local'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /etc/rc.d/rc.local'
 #configuracion de ssh
-#se copia desde el nfs la clave del servidor
+#se copia desde el nfs la clave del servidor en la cuenta root
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir ~/.ssh"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp /nfs/.ssh/id_rsa.pub /nfs/.ssh/id_rsa ~/.ssh"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cd ~/.ssh'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp id_rsa.pub authorized_keys'
+
+#se copia desde el nfs la clave del servidor en la cuenta mpiuser
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "mkdir /home/mpiuser/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa.pub /home/mpiuser/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa /home/mpiuser/.ssh"'
