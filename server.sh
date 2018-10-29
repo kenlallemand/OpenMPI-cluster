@@ -77,4 +77,3 @@ sudo -u mpiuser -H sh -c "which mpirun"
 yum install -y python-pip mpi4py-openmpi
 echo "Ya esta listo, openmpi funcional con los compiladores de c, c++ y fortran, diviertete :)"
 cd /nfs/openmpi/projects
-su - mpiuser

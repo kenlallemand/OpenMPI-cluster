@@ -44,8 +44,8 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /e
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /etc/rc.d/rc.local'
 #configuracion de ssh
 #se copia desde el nfs la clave del servidor en la cuenta root
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir ~/.ssh"'
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp /nfs/.ssh/id_rsa.pub /nfs/.ssh/id_rsa ~/.ssh"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir ~/.ssh'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp /nfs/.ssh/id_rsa.pub /nfs/.ssh/id_rsa ~/.ssh'
 #se copia la clave del servidor como clave segura
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
 #se copia desde el nfs la clave del servidor en la cuenta mpiuser
