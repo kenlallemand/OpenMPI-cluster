@@ -9,7 +9,7 @@ echo 'Agrega la contraseña para mpiuser(se recomienda usar mpiuser si es solo u
 passwd mpiuser
 #Agregacion de permisos root al usuario recientemente creado
 echo "mpiuser   ALL=(ALL)   ALL" >> /etc/sudoers
-yum -y install nfs-utils openssh-server nano python-pip
+yum -y install nfs-utils openssh-server nano sshpass
 systemctl start rpcbind nfs-server
 systemctl enable rpcbind nfs-server
 mkdir /nfs
@@ -74,7 +74,7 @@ which mpirun
 sudo -u mpiuser -H sh -c "which mpirun"
 #se instala el soporte para mpi4python
 #pip install mpi4py
-yum install -y mpi4py-openmpi
+yum install -y python-pip mpi4py-openmpi
 echo "Ya esta listo, openmpi funcional con los compiladores de c, c++ y fortran, diviertete :)"
 cd /nfs/openmpi/projects
 su - mpiuser

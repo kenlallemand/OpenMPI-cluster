@@ -27,11 +27,6 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'yum -y inst
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir -p /nfs'
 #se toma como predeterminada del servidor la direccion 10.0.1.2
 read -p "IP local del servidor (normalmente 10.0.1.2): " ip_server
-#debug
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "$ip_server ip en el cliente opcion 2""
-
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "showmount -e $ip_server"
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "rpcinfo -p $ip_server"
 #montaje disco de red en carpeta local
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "mount $ip_server:/nfs /nfs"
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir /nfs/online_nodes/'
@@ -51,6 +46,7 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'chmod +x /e
 #se copia desde el nfs la clave del servidor en la cuenta root
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir ~/.ssh"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp /nfs/.ssh/id_rsa.pub /nfs/.ssh/id_rsa ~/.ssh"'
+#se copia la clave del servidor como clave segura
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
 #se copia desde el nfs la clave del servidor en la cuenta mpiuser
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "mkdir /home/mpiuser/.ssh"'
@@ -58,12 +54,17 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpi
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /nfs/.ssh/id_rsa /home/mpiuser/.ssh"'
 #se copia la clave del servidor como clave segura
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "cp /home/mpiuser/.ssh/id_rsa.pub /home/mpiuser/.ssh/authorized_keys"'
-#se agregan en el entorno del sistema los binarios y librerias de openmpi
+#se agregan en el entorno del sistema los binarios y librerias de openmpi en la cuenta mpiuser
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "export PATH=/nfs/openmpi/bin:$PATH" >> /home/mpiuser/.bashrc'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> /home/mpiuser/.bashrc'
+#se agregan en el entorno del sistema los binarios y librerias de openmpi en la cuenta root
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "export PATH=/nfs/openmpi/bin:$PATH" >> ~/.bashrc'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "export LD_LIBRARY_PATH=/nfs/openmpi/lib:$LD_LIBRARY_PATH" >> ~/.bashrc'
 #se actualiza el entorno del sistema
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'source ~/.bashrc'
 echo $nombre_pc >> /home/mpiuser/.mpi_hostfile
+echo $nombre_pc >> ~/.mpi_hostfile
 #instalacion soporte python para mpi
-yum install -y mpi4py-openmpi
+yum install -y python-pip mpi4py-openmpi
 echo "cliente del cluster configurado correctamente"
