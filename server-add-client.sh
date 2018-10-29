@@ -27,15 +27,17 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mpius
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'yum -y install nfs-utils wget'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mkdir -p /nfs'
 #se toma como predeterminada del servidor la direccion 10.0.1.2
-read -p "IP local del servidor (normalmente 10.0.1.2): " ip_pc
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'showmount -e $ip_pc ; rpcinfo -p $ip_pc'
+read -p "IP local del servidor (normalmente 10.0.1.2): " ip_server
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'showmount -e $ip_server ; rpcinfo -p $ip_server'
 #montaje disco de red en carpeta local
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mount $ip_pc:/nfs /nfs'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "mount $ip_server:/nfs /nfs"'
+read -p "esperando debug" debug
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mount $ip_server:/nfs /nfs'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'df -h'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'touch /nfs/sucess-$ip_local'
 echo "$nombre_pc	$ip_local" >> /nfs/hosts
 #se guarda para proximo montaje
-sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "$ip_pc:/nfs /nfs nfs auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0" >> /etc/fstab'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "$ip_server:/nfs /nfs nfs auto,noatime,nolock,bg,nfsvers=3,intr,tcp,actimeo=1800 0 0" >> /etc/fstab'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'mount -a'
 
 #configuracion de ssh
