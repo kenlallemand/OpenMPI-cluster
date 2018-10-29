@@ -74,6 +74,8 @@ which mpirun
 sudo -u mpiuser -H sh -c "which mpirun"
 #se instala el soporte para mpi4python
 #pip install mpi4py
-yum install -y python-pip mpi4py-openmpi
+yum install -y python-pip mpi4py-openmpi python-devel
+pip install mpi4py
 echo "Ya esta listo, openmpi funcional con los compiladores de c, c++ y fortran, diviertete :)"
 cd /nfs/openmpi/projects
+echo "Ahora estas en al carpeta de proyectos, ejecuta con confianza"
