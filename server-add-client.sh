@@ -63,6 +63,7 @@ sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'echo "expor
 #se actualiza el entorno del sistema
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'sudo -u mpiuser -H sh -c "source /home/mpiuser/.bashrc"'
 sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local 'source ~/.bashrc'
+sshpass -p $pass_ssh ssh -o StrictHostKeyChecking=no root@$ip_local "echo "$ip_server	server" >> /etc/hosts"
 echo $nombre_pc >> /home/mpiuser/.mpi_hostfile
 echo $nombre_pc >> ~/.mpi_hostfile
 #instalacion soporte python para mpi
