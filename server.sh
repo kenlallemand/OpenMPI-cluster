@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo "Script para la creacion del servidor del Cluster, NFS"
 echo "Asegurate de ejecutarlo como root"
 echo "Para ser ejecutado en centOS 7 y superior, con acceso a internet"
